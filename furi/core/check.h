@@ -32,10 +32,10 @@ FURI_NORETURN void __furi_halt_implementation(void);
 
 /** Crash system with message. Show message after reboot. */
 #define __furi_crash(message)                                 \
+    (void)message;                                            \
     do {                                                      \
-        register const void* r12 asm("r12") = (void*)message; \
-        asm volatile("sukima%=:" : : "r"(r12));               \
-        __furi_crash_implementation();                        \
+        int *null_ptr = NULL;                                 \
+        *null_ptr = 0;                                        \
     } while(0)
 
 /** Crash system
@@ -47,9 +47,8 @@ FURI_NORETURN void __furi_halt_implementation(void);
 /** Halt system with message. */
 #define __furi_halt(message)                                  \
     do {                                                      \
-        register const void* r12 asm("r12") = (void*)message; \
-        asm volatile("sukima%=:" : : "r"(r12));               \
-        __furi_halt_implementation();                         \
+        int *null_ptr = NULL;                                 \
+        *null_ptr = 0;                                        \
     } while(0)
 
 /** Halt system
@@ -99,9 +98,10 @@ FURI_NORETURN void __furi_halt_implementation(void);
     M_APPLY(__furi_assert, M_DEFAULT_ARGS(2, (__FURI_ASSERT_MESSAGE_FLAG), __VA_ARGS__))
 
 #define furi_break(__e)             \
+    (void)(__e);                    \
     do {                            \
         if(!(__e)) {                \
-            asm volatile("bkpt 0"); \
+            __furi_crash(__e);      \
         }                           \
     } while(0)
 

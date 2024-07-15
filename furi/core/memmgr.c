@@ -9,43 +9,43 @@ extern size_t xPortGetFreeHeapSize(void);
 extern size_t xPortGetTotalHeapSize(void);
 extern size_t xPortGetMinimumEverFreeHeapSize(void);
 
-void* malloc(size_t size) {
-    return pvPortMalloc(size);
-}
+// void* malloc(size_t size) {
+//     return pvPortMalloc(size);
+// }
 
-void free(void* ptr) {
-    vPortFree(ptr);
-}
+// void free(void* ptr) {
+//     vPortFree(ptr);
+// }
 
-void* realloc(void* ptr, size_t size) {
-    if(size == 0) {
-        vPortFree(ptr);
-        return NULL;
-    }
+// void* realloc(void* ptr, size_t size) {
+//     if(size == 0) {
+//         vPortFree(ptr);
+//         return NULL;
+//     }
 
-    void* p = pvPortMalloc(size);
-    if(ptr != NULL) {
-        memcpy(p, ptr, size);
-        vPortFree(ptr);
-    }
+//     void* p = pvPortMalloc(size);
+//     if(ptr != NULL) {
+//         memcpy(p, ptr, size);
+//         vPortFree(ptr);
+//     }
 
-    return p;
-}
+//     return p;
+// }
 
-void* calloc(size_t count, size_t size) {
-    return pvPortMalloc(count * size);
-}
+// void* calloc(size_t count, size_t size) {
+//     return pvPortMalloc(count * size);
+// }
 
-char* strdup(const char* s) {
-    // arg s marked as non-null, so we need hack to check for NULL
-    furi_check(((uint32_t)s << 2) != 0);
+// char* strdup(const char* s) {
+//     // arg s marked as non-null, so we need hack to check for NULL
+//     furi_check(((uint32_t)s << 2) != 0);
 
-    size_t siz = strlen(s) + 1;
-    char* y = pvPortMalloc(siz);
-    memcpy(y, s, siz);
+//     size_t siz = strlen(s) + 1;
+//     char* y = pvPortMalloc(siz);
+//     memcpy(y, s, siz);
 
-    return y;
-}
+//     return y;
+// }
 
 size_t memmgr_get_free_heap(void) {
     return xPortGetFreeHeapSize();
