@@ -22,7 +22,7 @@ extern "C" {
 
 // Flags instead of pointers will save ~4 bytes on furi_assert and furi_check calls.
 #define __FURI_ASSERT_MESSAGE_FLAG (0x01)
-#define __FURI_CHECK_MESSAGE_FLAG (0x02)
+#define __FURI_CHECK_MESSAGE_FLAG  (0x02)
 
 /** Crash system */
 FURI_NORETURN void __furi_crash_implementation(void);
@@ -34,8 +34,7 @@ FURI_NORETURN void __furi_halt_implementation(void);
 #define __furi_crash(message)                                 \
     (void)message;                                            \
     do {                                                      \
-        int *null_ptr = NULL;                                 \
-        *null_ptr = 0;                                        \
+        __furi_crash_implementation();                        \
     } while(0)
 
 /** Crash system
@@ -47,8 +46,7 @@ FURI_NORETURN void __furi_halt_implementation(void);
 /** Halt system with message. */
 #define __furi_halt(message)                                  \
     do {                                                      \
-        int *null_ptr = NULL;                                 \
-        *null_ptr = 0;                                        \
+        __furi_halt_implementation();                         \
     } while(0)
 
 /** Halt system
@@ -98,10 +96,9 @@ FURI_NORETURN void __furi_halt_implementation(void);
     M_APPLY(__furi_assert, M_DEFAULT_ARGS(2, (__FURI_ASSERT_MESSAGE_FLAG), __VA_ARGS__))
 
 #define furi_break(__e)             \
-    (void)(__e);                    \
     do {                            \
         if(!(__e)) {                \
-            __furi_crash(__e);      \
+            __furi_crash(e);     \
         }                           \
     } while(0)
 
